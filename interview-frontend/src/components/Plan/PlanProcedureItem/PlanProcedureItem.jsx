@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactSelect from "react-select";
 
 const PlanProcedureItem = ({ procedure, users }) => {
@@ -6,9 +6,20 @@ const PlanProcedureItem = ({ procedure, users }) => {
 
     const handleAssignUserToProcedure = (e) => {
         setSelectedUsers(e);
-        // TODO: Remove console.log and add missing logic
-        console.log(e);
+        localStorage.setItem(`selectedUsers-${procedure.procedureTitle}`, JSON.stringify(e));
     };
+
+    const loadSelectedUsers = () => {
+        const savedUsers = localStorage.getItem(`selectedUsers-${procedure.procedureTitle}`);
+        if (savedUsers) {
+            const parsedUsers = JSON.parse(savedUsers);
+            setSelectedUsers(parsedUsers);
+        }
+    };
+
+    useEffect(() => {
+        loadSelectedUsers();
+    });
 
     return (
         <div className="py-2">
